@@ -1,8 +1,10 @@
- var express = require('express');
+var express = require('express');
 var PORT = process.env.PORT || 8080;
 var app = express();
 var Sequelize = require('sequelize');
-var handlebars = require('handlebars');
+var exphbs = require('express-handlebars');
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 var models = require('./models');
 
@@ -24,9 +26,11 @@ models.TodoItem.bulkCreate(
 
 app.get('/', function(req, res){
 	//Grabs all todos
-	models.TodoItem.findAll({}).then(function(data){
-		res.render('home', data)
-	})
+	//Select all todo items
+	// var todoItems = models.TodoItem.findAll({}).then(function(data){
+	// 	res.send (data);
+	// })
+	res.render('home');
 });
 
 app.post('/todos/', function(req, res){
