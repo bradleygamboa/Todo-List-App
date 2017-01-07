@@ -10,6 +10,9 @@ app.set('view engine', 'handlebars');
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false}));
 
+var methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
 var models = require('./models');
 models.TodoItem.sync({ force: true }).then(function() {
         return models.TodoItem.bulkCreate(
@@ -33,23 +36,19 @@ app.get('/', function(req, res){
 	//Grabs all todos
 	//Select all todo items
 	models.TodoItem.findAll({}).then(function(data){
-		console.log(data)
 		res.render('home', {tasks: data});
 	})
 
 });
 
-app.post('/todos/', function(req, res){
-	//Adds a new todo
-	console.log(req.body.newTask);
-	models.TodoItem.create({
-		task: req.body.newTask,
-		done: false
-	}).then(function(){
-		res.redirect('/');
-	});
-	
-	
+app.post('/todos/', function(req, res) {
+    //Adds a new todo
+    models.TodoItem.create({
+        task: req.body.newTask,
+        done: false
+    }).then(function() {
+        res.redirect('/');
+    });
 
 });
 
@@ -59,9 +58,18 @@ app.put('/todos/:id', function(req, res){
 
 });
 
-app.delete('/todos/:id', function(req, res){
-	//Deletes todo with specific id
-	res.send('Deleted');
+app.delete('/todos/:id', function(req, res) {
+    //Deletes todo with specific id
+    console.log("We want to delete #" + req.params.id);
+        //What we want is /todo/4
+    models.TodoItem.destroy(
+    	{where: {
+            id: req.params.id
+        }
+    }).then(function(data) {
+        res.redirect('/');
+    })
+
 
 });
 
