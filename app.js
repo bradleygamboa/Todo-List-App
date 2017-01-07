@@ -57,7 +57,7 @@ app.post('/todos/', function(req, res) {
 // });
 
 app.delete('/todos/:id', function(req, res) {
-    //Deletes todo with specific id
+    //Deletes todo with specific ids
     models.TodoItem.destroy({
         where: {
             id: req.params.id
