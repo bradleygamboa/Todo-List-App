@@ -14,22 +14,22 @@ var methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
 var models = require('./models');
-models.TodoItem.sync({ force: true }).then(function() {
-    return models.TodoItem.bulkCreate(
+// models.TodoItem.sync({ force: true }).then(function() {
+//     return models.TodoItem.bulkCreate(
 
-        [{
-            task: "watch rouge one",
-            done: false
-        }, {
-            task: "bathe dog",
-            done: false
-        }, {
-            task: 'brush cat',
-            done: false
-        }]
+//         [{
+//             task: "watch rouge one",
+//             done: false
+//         }, {
+//             task: "bathe dog",
+//             done: false
+//         }, {
+//             task: 'brush cat',
+//             done: false
+//         }]
 
-    );
-});
+//     );
+// });
 
 app.get('/', function(req, res) {
     //Grabs all todos and displays on main page
@@ -58,8 +58,6 @@ app.post('/todos/', function(req, res) {
 
 app.delete('/todos/:id', function(req, res) {
     //Deletes todo with specific id
-    console.log("We want to delete #" + req.params.id);
-    //What we want is /todo/4
     models.TodoItem.destroy({
         where: {
             id: req.params.id
